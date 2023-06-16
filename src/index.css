@@ -12,3 +12,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.navbar {
+  background: #343a40; /* Set your desired background color */
+  border-radius: 10px; /* Adjust the value to control the amount of curve */
+}
+
+.navbar-brand {
+  border-radius: 10px; /* Adjust the value to control the amount of curve */
+}
+
+.navbar-nav .nav-link {
+  border-radius: 10px; /* Adjust the value to control the amount of curve */
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: #6c757d; /* Set your desired hover background color */
+}
+
+.navbar-toggler {
+  border-radius: 10px; /* Adjust the value to control the amount of curve */
+}
+
+.navbar-toggler-icon {
+  background-color: white; /* Set your desired color for the toggler icon */
+  border-radius: 50%; /* Adjust the value to make the toggler icon circular */
+}
+
+.card{
+  color: #6c757d;
+}
+
+#carousel{
+  max-height: 500px;
+}
