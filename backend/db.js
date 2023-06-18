@@ -1,4 +1,3 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
 const { default: mongoose } = require("mongoose");
 
 const databaseName = "GoFood";
@@ -18,9 +17,9 @@ async function connectToMongoDB() {
 
     console.log("Connected to MongoDB successfully!");
 
-    const fetched_data = mongoose.connection.db.collection("food_items"); //don't put await here as we don't want to wait to connect instead connect should be asap
-    const data = await fetched_data.find({}).toArray(); //but wait until the find function finds the data from collection
-    console.log('We can fetch the data');
+    // const fetched_data = mongoose.connection.db.collection("food_items"); //don't put await here as we don't want to wait to connect instead connect should be asap
+    // const data = await fetched_data.find({}).toArray(); //but wait until the find function finds the data from collection
+    // console.log('We can fetch the data');
 
     return mongoose.connection;
   } 

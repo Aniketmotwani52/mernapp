@@ -4,6 +4,15 @@ const port = 5000;
 
 const connectToMongoDB = require('./db');
 
+app.use((req,res,next)=>{
+  res.setHeader("Access-Control-Allow-Origin","http://localhost:3000");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+})
+
 // Connect to MongoDB
 connectToMongoDB()
   .then(() => {
@@ -19,6 +28,8 @@ app.get('/',(req,res) => {
 
 app.use(express.json())
 app.use('/api',require("./Routes/CreateUser"));
+//whenever in index.js this /api get's called i.e. /api + /createuser from (./Routes/CreateUser) 
+//then the router function get's exported and is hitted
 
 
 app.listen(port, () => {
