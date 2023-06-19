@@ -11,7 +11,7 @@ const Card = (props) => {
         <img
           src={props.imageURL}
           className="card-img-top rounded"
-          alt="..."
+          alt={props.item_name}
           style={{ objectFit: "cover", height: "120px" }}
         />
         <div className="card-body">
