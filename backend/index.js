@@ -30,6 +30,7 @@ app.use(express.json())
 app.use('/api',require("./Routes/CreateUser"));
 //whenever in index.js this /api get's called i.e. /api + /createuser from (./Routes/CreateUser) 
 //then the router function get's exported and is hitted
+app.use('/api',require("./Routes/DisplayData")); //api + /foodData (exported from displayData) 
 
 
 app.listen(port, () => {

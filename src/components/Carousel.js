@@ -1,7 +1,13 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
-const Carousel = () => {
+const Carousel = ({onSearch}) => {
+
+  const handleChange = (event)=>{
+    const value = event.target.value;
+    onSearch(value);
+  }
+
   return (
     <div>
       <div
@@ -11,21 +17,13 @@ const Carousel = () => {
       >
         <div className="carousel-inner" id="carousel" style={{"objectFit":"contain !important"}}>
           <div className="carousel-caption" style={{ zIndex: "10" }}>
-            <form className="d-flex">
               <input
                 className="form-control me-2"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
+                onChange={handleChange}
               />
-              <button
-                className="btn btn-outline-dark text-black bg-light rounded"
-                type="submit"
-                style={{ color: "black" }}
-              >
-                Search
-              </button>
-            </form>
           </div>
           <div className="carousel-item active" >
             <img

@@ -6,7 +6,8 @@ const Login = () => {
     const [credentials, setcredentials] = useState({email:"",password:""});
 
     let navigate = useNavigate();
-
+    
+    //as soon as the submit button is pressed we want to fetch the data from that api
     const handleSubmit = async (e) => {
         e.preventDefault();
         //whenever the submit function is called then the link is called and post method is used to sent the data in the body format
