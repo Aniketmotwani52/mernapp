@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "react-bootstrap";
+import Cart from "../pages/Cart";
+import Modal from "../Modal";
+import { useCart } from "./ContextReducer";
 
 const Navbar = () => {
+
+  //to change the number of products added into the Cart
+  let data = useCart();
+
   const navigate = useNavigate();
+
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     navigate("/LoginPage");
   };
+
+  const [cartView, setCartView] = useState(false);
+
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -42,7 +54,7 @@ const Navbar = () => {
                   <Link
                     className="nav-link active fs-5 "
                     aria-current="page"
-                    to="/"
+                    to="/myOrder"
                   >
                     My Orders
                   </Link>
@@ -55,9 +67,18 @@ const Navbar = () => {
               <div className="d-flex">
                 <div
                   className="btn bg-secondary text-black mx-1" //mx is for margin left while me is for margin right
+                  onClick={() => {
+                    setCartView(true);
+                  }}
                 >
-                  My Cart
+                  My Cart {"  "}
+                  <Badge pill bg="white" text="dark">
+                    {data.length}
+                  </Badge>
                 </div>
+                {cartView ? 
+                    <Modal onClose={() => setCartView(false)}><Cart></Cart></Modal>
+                   : null}
                 <div
                   className="btn bg-secondary text-black mx-1" //mx is for margin left while me is for margin right
                   onClick={handleLogout}

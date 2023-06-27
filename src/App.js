@@ -7,6 +7,7 @@ import "../node_modules/bootstrap/dist/js/bootstrap.bundle";
 import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min";
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
+import MyOrder from "./pages/MyOrder";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route exact path="/" element={<Home></Home>}></Route>
           <Route exact path="/LoginPage" element={<Login></Login>}></Route>
           <Route exact path="/SignUpPage" element={<SignUp></SignUp>}></Route> 
+          <Route exact path='/myOrder' element={<MyOrder></MyOrder>}></Route>
         </Routes>
       </div>
     </Router>

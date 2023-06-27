@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const SignUp = () => {
-
+    const navigate=useNavigate();
     const [credentials, setcredentials] = useState({name:"",email:"",password:"",geolocation:""})
 
     //as soon as the submit button is pressed we want to fetch the data from that api
@@ -26,7 +28,12 @@ const SignUp = () => {
         console.log(json);
 
         if(!json.success){
-            alert("Enter Valid Creentials");
+            alert(json.error);
+          }
+
+        else if(json.success)
+        {
+          navigate("/LoginPage");
         }
 
     }

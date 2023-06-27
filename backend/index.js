@@ -32,6 +32,8 @@ app.use('/api',require("./Routes/CreateUser"));
 //then the router function get's exported and is hitted
 app.use('/api',require("./Routes/DisplayData")); //api + /foodData (exported from displayData) 
 
+app.use('/api',require("./Routes/OrderData"));
+
 
 app.listen(port, () => {
     console.log(`GoFood is listening on port ${port}`);

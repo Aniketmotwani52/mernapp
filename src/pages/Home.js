@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
+import { CartProvider } from "../components/ContextReducer";
 
 const Home = () => {
   const [foodItem, setFoodItem] = useState([]);
@@ -35,6 +36,7 @@ const Home = () => {
   }
 
   return (
+    <CartProvider>
     <div>
 
       <div>
@@ -61,10 +63,12 @@ const Home = () => {
                         <div key={item_data._id} className="col-12 col-md-6 col-lg-3">
                           <div className="fs-3 m-3 fst-italics">
                             <Card
-                              item_name={item_data.name}
-                              imageURL={item_data.img}
-                              about={item_data.description}
+                              // item_name={item_data.name}
+                              // imageURL={item_data.img}
+                              // about={item_data.description}
+                              item_data = {item_data}
                               option={item_data.options[0]}
+                              
                             />
                           </div>
                         </div>
@@ -86,6 +90,7 @@ const Home = () => {
       </div>
 
     </div>
+    </CartProvider>
   );
 };
 

@@ -22,10 +22,20 @@ router.post(
       return res.status(400).json({ errors: errors.array() }); //convert the errors to array and then display
     }
 
-    const salt = await bcrypt.genSalt(10);
-    let secPassword = await bcrypt.hash(req.body.password); //from frontend we are taking any string which is written and named as password and hashing it with salt  
+    const { email } = req.body;
 
+
+    
     try {
+
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ error: "Email already exists" });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      let secPassword = await bcrypt.hash(req.body.password,salt); //from frontend we are taking any string which is written and named as password and hashing it with salt  
+
       await User.create({
         //await is must as until n unless the user is not created in backend with the help of mongoose we will wait and will not deliver any further message
         name: req.body.name,
