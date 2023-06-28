@@ -2,6 +2,7 @@
 /* eslint-disable no-template-curly-in-string */
 const express = require("express");
 const router = express.Router();
+require('dotenv').config();
 const User = require("../models/User");
 const { body, validationResult } = require("express-validator");
 
@@ -12,7 +13,12 @@ const jwtSecret = "*hey@How$are#You!Aniket_Motwani*";
 const nodemailer = require('nodemailer');
 const mailchimp = require('mailchimp-api-v3');
 
-const mailchimpAPI = new mailchimp('1af0abe60a95dce25c745cbdf1ae5e13-us18');
+
+const userEmail = process.env.senderEmailAddress;
+const emailPassword = process.env.senderPassword;
+const mailchimpAPIKey = process.env.mailChimpAPIKey;
+
+const mailchimpAPI = new mailchimp(mailchimpAPIKey);
 
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000);
@@ -24,8 +30,8 @@ const sendOTP = async (email, otp) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'aniketmotwani52@gmail.com',
-        pass: 'juxnheuboiosdxpy'
+        user: userEmail,
+        pass: emailPassword
       }
     });
   
