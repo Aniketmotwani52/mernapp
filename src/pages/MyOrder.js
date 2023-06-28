@@ -48,14 +48,14 @@ export default function MyOrder() {
                                     return (
                                         item.map((arrayData) => {
                                             return (
-                                                <div  >
+                                                <div >
                                                     {arrayData.Order_date ? <div className='m-auto mt-5'>
 
                                                         {data = arrayData.Order_date}
                                                         <hr />
                                                     </div> :
 
-                                                        <div className='col-12 col-md-6 col-lg-3' >
+                                                        <div className='col-12 col-md-6 col-lg- ' >
                                                             <div className="card mt-3" style={{ width:"18rem",maxHeight: "450px" }}>
                                                                 <img src={arrayData.img} className="card-img-top" alt="..." style={{ height: "120px", objectFit: "cover" }} />
                                                                 <div className="card-body">
@@ -73,9 +73,6 @@ export default function MyOrder() {
                                                             </div>
 
                                                         </div>
-
-
-
                                                     }
 
                                                 </div>

@@ -1,3 +1,5 @@
+/* eslint-disable no-unreachable */
+/* eslint-disable no-template-curly-in-string */
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
@@ -7,8 +9,136 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const jwtSecret = "*hey@How$are#You!Aniket_Motwani*";
 
+const nodemailer = require('nodemailer');
+const mailchimp = require('mailchimp-api-v3');
+
+const mailchimpAPI = new mailchimp('1af0abe60a95dce25c745cbdf1ae5e13-us18');
+
+const generateOTP = () => {
+  return Math.floor(100000 + Math.random() * 900000);
+};
+
+const sendOTP = async (email, otp) => {
+  //console.log(otp);
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'aniketmotwani52@gmail.com',
+        pass: 'juxnheuboiosdxpy'
+      }
+    });
+  
+    const mailOptions = {
+      from: 'aniketmotwani52@gmail.com',
+      to: email,
+      subject: 'OTP Verification',
+      text: `Your OTP is: ${otp}`
+    };
+    
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to send OTP');
+  }
+};
+
+const otpStore = {}; // Initialize otpStore to store OTPs temporarily
+
+
+router.post(
+  "/verifyOTP",
+  [
+    body("email", "Invalid email address").isEmail(),
+    body("otp", "Invalid OTP").isLength({ min: 6, max: 6 }).isNumeric(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { email, otp } = req.body;
+
+    try {
+      const user = await User.findOne({ email });
+      if (user) {
+        return res.status(400).json({ error: "Email address already exists" });
+      }
+
+      // Check if OTP matches
+      if (otp == otpStore[email]) {
+        delete otpStore[email];
+        return res.json({ success: true });
+      }
+      else
+      {
+        // console.log("Here is the error in this code");
+        // console.log(otp);
+        // console.log(otpStore);
+        // console.log(otpStore[email]);
+        return res.status(400).json({ error: "Invalid OTP" });
+      }
+
+      // Remove OTP from store after verification
+      
+
+      
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ success: false, error: "Failed to verify OTP" });
+    }
+  }
+);
+
+
 router.post(
   "/createUser",
+  //These are the validators as they will check if the data entered by the user has the correct syntax or not  
+  [
+    body("name", "Name is too short").isLength({ min: 3 }),
+    body("email", "Invalid email address").isEmail(),
+    body("password", "Password is too short").isLength({ min: 7 }),
+  ],
+
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() }); //convert the errors to an array and then display
+    }
+
+    const { email } = req.body;
+
+    try {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ error: "Email already exists" });
+      }
+
+      // const salt = await bcrypt.genSalt(10);
+      // const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+      // Generate and store OTP
+      const otp = generateOTP();
+      otpStore[email] = otp;
+      console.log("generated otp");
+      console.log(otp);
+
+      // Send OTP to the user's email
+      await sendOTP(email, otp);
+
+      return res.json({ success: true });
+    } catch (error) {
+      console.log(error);
+      res.json({ success: false });
+    }
+  }
+);
+
+
+//Creating the user in database
+router.post(
+  "/creatingUser",
   //These are the validators as the will check that the data which user has entered is correct in syntax or not  
   [
     body("name", "Name is too short").isLength({ min: 3 }),
@@ -55,47 +185,37 @@ router.post(
 router.post(
   "/loginuser",
   [
-    body("email", "invalid email address").isEmail(),
+    body("email", "Invalid email address").isEmail(),
     body("password", "Password is too short").isLength({ min: 7 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() }); //convert the errors to array and then display
+      return res.status(400).json({ errors: errors.array() }); //convert the errors to an array and then display
     }
 
-    //whenevr the loginuser route is executed we have ti check the data
-    //in try block we will be validating the data
-    //as when the api is called in that req.body we will be having email and pass so we have to validate that
     try {
-      //Here this will find that the provided email exist or not in our schema(user) created by us
-      let email = req.body.email;
-      let userData = await User.findOne({ email: email });
+      const email = req.body.email;
+      const userData = await User.findOne({ email });
 
-      //if the useremail is empty i.e. the findOne function doesn't finds the email id
       if (!userData) {
-        return res.status(400).json({ error: "Enter Valid email id !" });
+        return res.status(400).json({ error: "Invalid email address" });
       }
 
-      const passwordCompare = bcrypt.compare(req.body.password,userData.password);
+      const passwordCompare = await bcrypt.compare(req.body.password, userData.password);
       if (!passwordCompare) {
-        return res.status(400).json({ error: "Enter Valid Password !" });
+        return res.status(400).json({ error: "Invalid password" });
       }
 
-      
       const data = {
-        user:{
-            id: userData.id
+        user: {
+          id: userData.id
         }
-      }
-      //Header is automatically generated 
-      //Payload is the data string i.e. the userid which we have fetched from the backend
-      //secret is the jwtSecret which we have generated in our backend which is not visible to user
-      const authToken =  jwt.sign(data,jwtSecret);
-      //the generated authToken will be having header.payload.secret
+      };
 
-      return res.json({ success: true,authToken:authToken });
+      const authToken = jwt.sign(data, jwtSecret);
 
+      return res.json({ success: true, authToken });
     } catch (error) {
       console.log(error);
       res.json({ success: false });

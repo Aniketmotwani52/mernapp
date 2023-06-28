@@ -33,6 +33,8 @@ app.use('/api',require("./Routes/CreateUser"));
 app.use('/api',require("./Routes/DisplayData")); //api + /foodData (exported from displayData) 
 
 app.use('/api',require("./Routes/OrderData"));
+app.use('/api',require("./Routes/AdminLogin"));
+app.use('/api',require("./Routes/UserData"));
 
 
 app.listen(port, () => {

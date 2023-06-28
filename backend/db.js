@@ -27,6 +27,10 @@ async function connectToMongoDB() {
     const fetched_data2 = mongoose.connection.db.collection("food_Collections");
     const category_data = await fetched_data2.find({}).toArray();
     global.foodCategory = category_data;
+
+    const fetched_data3 = mongoose.connection.db.collection("users");
+    const users_data = await fetched_data3.find({}).toArray();
+    global.usersData = users_data;
     
 
     return mongoose.connection;

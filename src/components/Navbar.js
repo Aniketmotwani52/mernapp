@@ -95,6 +95,12 @@ const Navbar = () => {
                   Log In
                 </Link>
                 <Link
+                  className="btn bg-secondary text-black mx-1" //mx is for margin left while me is for margin right
+                  to="/AdminPage"
+                >
+                  Log In as Admin
+                </Link>
+                <Link
                   className="btn bg-secondary text-black mx-1"
                   to="/SignUpPage"
                 >
