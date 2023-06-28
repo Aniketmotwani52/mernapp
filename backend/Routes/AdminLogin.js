@@ -7,7 +7,7 @@ const { body, validationResult } = require("express-validator");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const jwtSecret = "*hey@How$are#You!Aniket_Motwani*";
+const jwtSecret = process.env.jwtSecretToken;
 
 router.post(
   "/loginadmin",

@@ -8,7 +8,7 @@ const { body, validationResult } = require("express-validator");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const jwtSecret = "*hey@How$are#You!Aniket_Motwani*";
+const jwtSecret = process.env.jwtSecretToken;
 
 const nodemailer = require('nodemailer');
 const mailchimp = require('mailchimp-api-v3');
